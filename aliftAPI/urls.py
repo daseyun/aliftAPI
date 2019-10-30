@@ -29,6 +29,7 @@ router.register(r'exerciseWeight', views.ExerciseWeightViewSet)
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path('', include('frontend.urls')),
     path('', include(router.urls)),
     path('', include('accounts.urls')),
     path('admin/', admin.site.urls),

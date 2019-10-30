@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'core',
     'knox',
     'accounts',
+    'frontend'
 ]
 
 
