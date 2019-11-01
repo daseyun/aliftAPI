@@ -3,8 +3,9 @@
 
 // axios for async requests
 import axios from "axios";
+import { createMessage } from "./messages";
 
-import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM } from "./types";
+import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM, GET_ERRORS } from "./types";
 
 // GET PROGRAMS
 
@@ -27,6 +28,7 @@ export const deleteProgram = id => dispatch => {
   axios
     .delete(`/programs/${id}/`)
     .then(res => {
+      dispatch(createMessage({ deleteProgram: "Program Deleted" }));
       dispatch({
         type: DELETE_PROGRAM,
         payload: id //reucer is expecting a type. in /reducers/programs.js
@@ -40,10 +42,20 @@ export const addProgram = program => dispatch => {
   axios
     .post(`/programs/`, program)
     .then(res => {
+      dispatch(createMessage({ addProgram: "Program Added" }));
       dispatch({
         type: ADD_PROGRAM,
         payload: res.data
       });
     })
-    .catch(err => console.log(program));
+    .catch(err => {
+      const errors = {
+        msg: err.response.data,
+        status: err.response.status
+      };
+      dispatch({
+        type: GET_ERRORS,
+        payload: errors // dispatches state to redux state.
+      });
+    });
 };
