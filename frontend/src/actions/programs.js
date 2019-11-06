@@ -3,9 +3,9 @@
 
 // axios for async requests
 import axios from "axios";
-import { createMessage } from "./messages";
+import { createMessage, returnErrors } from "./messages";
 
-import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM, GET_ERRORS } from "./types";
+import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM } from "./types";
 
 // GET PROGRAMS
 
@@ -20,7 +20,9 @@ export const getPrograms = () => dispatch => {
         payload: res.data //reucer is expecting a type. in /reducers/programs.js
       });
     })
-    .catch(err => console.log(err));
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };
 
 // DELETE PROGRAM
@@ -48,14 +50,7 @@ export const addProgram = program => dispatch => {
         payload: res.data
       });
     })
-    .catch(err => {
-      const errors = {
-        msg: err.response.data,
-        status: err.response.status
-      };
-      dispatch({
-        type: GET_ERRORS,
-        payload: errors // dispatches state to redux state.
-      });
-    });
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
 };

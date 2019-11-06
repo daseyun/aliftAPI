@@ -21,7 +21,7 @@ from core import views
 router = routers.DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet)
 router.register(r'muscleGroups', views.MuscleGroupViewSet)
-router.register(r'programs', views.ProgramViewSet)
+router.register(r'programs', views.ProgramViewSet, basename='Program')
 router.register(r'exercises', views.ExerciseViewSet)
 router.register(r'exerciseSetDetail', views.ExerciseRepsViewSet)
 router.register(r'exerciseWeight', views.ExerciseWeightViewSet)
