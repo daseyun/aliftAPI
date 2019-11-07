@@ -24,6 +24,7 @@ export class Form extends Component {
       // etc
     } = this.state;
     const program = { program_name, exerciseSetDetail };
+    console.log(program);
     this.props.addProgram(program);
     this.setState({
       program_name: ""

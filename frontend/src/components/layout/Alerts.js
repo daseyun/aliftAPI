@@ -17,11 +17,15 @@ export class Alerts extends Component {
       if (error.msg.owner) alert.error(`Owner: ${error.msg.owner.join()}`);
       if (error.msg.message)
         alert.error(`Message: ${error.msg.message.join()}`);
+      if (error.msg.non_field_errors)
+        alert.error(error.msg.non_field_errors.join());
+      if (error.msg.username) alert.error(error.msg.username.join());
     }
 
     if (message !== prevProps.message) {
       if (message.deleteProgram) alert.success(message.deleteProgram);
       if (message.addProgram) alert.success(message.addProgram);
+      if (message.passwordsNotMatch) alert.error(message.passwordsNotMatch);
     }
   }
 

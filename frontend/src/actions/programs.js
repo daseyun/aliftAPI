@@ -4,6 +4,7 @@
 // axios for async requests
 import axios from "axios";
 import { createMessage, returnErrors } from "./messages";
+import { tokenConfig } from "./auth";
 
 import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM } from "./types";
 
@@ -11,9 +12,9 @@ import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM } from "./types";
 
 // dispatch whenever we wanna dispatch an action to our reducer (ex. GET_PROGRAMS)
 // dispatched to reducer. (/reducers/programs.js)
-export const getPrograms = () => dispatch => {
+export const getPrograms = () => (dispatch, getState) => {
   axios
-    .get("/programs")
+    .get("/programs", tokenConfig(getState)) // pass in: tokenConfig(getState) for any protected route.
     .then(res => {
       dispatch({
         type: GET_PROGRAMS,
@@ -26,9 +27,9 @@ export const getPrograms = () => dispatch => {
 };
 
 // DELETE PROGRAM
-export const deleteProgram = id => dispatch => {
+export const deleteProgram = id => (dispatch, getState) => {
   axios
-    .delete(`/programs/${id}/`)
+    .delete(`/programs/${id}/`, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ deleteProgram: "Program Deleted" }));
       dispatch({
@@ -40,9 +41,10 @@ export const deleteProgram = id => dispatch => {
 };
 
 // ADD PROGRAM
-export const addProgram = program => dispatch => {
+export const addProgram = program => (dispatch, getState) => {
+  console.log(tokenConfig(getState));
   axios
-    .post(`/programs/`, program)
+    .post(`/programs/`, program, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ addProgram: "Program Added" }));
       dispatch({
