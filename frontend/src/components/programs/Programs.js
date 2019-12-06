@@ -3,9 +3,14 @@ import React, { Component, Fragment } from "react";
 // to work with redux from any component, use connect
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 import { getPrograms, deleteProgram } from "../../actions/programs";
 
 export class Programs extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
   // like a signature. will throw error if those makred in required dont show up. Not necessary. good praactice.
   static propTypes = {
     programs: PropTypes.array.isRequired,
@@ -17,7 +22,13 @@ export class Programs extends Component {
     this.props.getPrograms();
   }
 
+  handleClick = e => {
+    this.setState({ redirectProgramId: e });
+  };
   render() {
+    if (this.state.redirectProgramId) {
+      return <Redirect push to={"/program/" + this.state.redirectProgramId} />;
+    }
     return (
       <Fragment>
         <h2>Programs</h2>
@@ -32,7 +43,10 @@ export class Programs extends Component {
           </thead>
           <tbody>
             {this.props.programs.map(program => (
-              <tr key={program.id}>
+              <tr
+                onClick={this.handleClick.bind(this, program.id)}
+                key={program.id}
+              >
                 <td>{program.id}</td>
                 <td>{program.program_name}</td>
                 <td>{program.owner}</td>

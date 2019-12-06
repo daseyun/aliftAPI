@@ -14,13 +14,14 @@ import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM } from "./types";
 // dispatched to reducer. (/reducers/programs.js)
 export const getPrograms = () => (dispatch, getState) => {
   axios
-    .get("/programs", tokenConfig(getState)) // pass in: tokenConfig(getState) for any protected route.
+    .get("/programs/", tokenConfig(getState)) // pass in: tokenConfig(getState) for any protected route.
     .then(res => {
       dispatch({
         type: GET_PROGRAMS,
-        payload: res.data //reucer is expecting a type. in /reducers/programs.js
+        payload: res.data //reducer is expecting a type. in /reducers/programs.js
       });
     })
+
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))
     );

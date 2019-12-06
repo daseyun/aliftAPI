@@ -15,6 +15,7 @@ import Dashboard from "./programs/Dashboard";
 import Alerts from "./layout/Alerts";
 import Login from "./accounts/Login";
 import Register from "./accounts/Register";
+import ProgramDashBoard from "./programDetail/ProgramDetailPage";
 import PrivateRoute from "./common/PrivateRoute";
 
 // redux stuff
@@ -45,6 +46,11 @@ class App extends Component {
                   <PrivateRoute exact path="/" component={Dashboard} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
+                  <Route
+                    exact
+                    path="/program/:programId"
+                    component={ProgramDashBoard}
+                  />
                 </Switch>
               </div>
             </Fragment>
