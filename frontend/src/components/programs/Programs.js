@@ -10,6 +10,9 @@ export class Programs extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+    this.sleep = milliseconds => {
+      return new Promise(resolve => setTimeout(resolve, milliseconds));
+    };
   }
   // like a signature. will throw error if those makred in required dont show up. Not necessary. good praactice.
   static propTypes = {
@@ -20,6 +23,10 @@ export class Programs extends Component {
 
   componentDidMount() {
     this.props.getPrograms();
+    this.sleep(500).then(() => {
+      //do stuff
+      console.log(this.props.programs[0].program_name);
+    });
   }
 
   handleClick = e => {
