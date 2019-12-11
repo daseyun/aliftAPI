@@ -1,4 +1,4 @@
-import { GET_PROGRAM } from "../actions/types.js";
+import { GET_PROGRAM, GET_PROGRAM_DETAIL } from "../actions/types.js";
 
 const initialState = {
   program: null
@@ -10,6 +10,11 @@ export default function(state = initialState, action) {
       return {
         ...state, // gets all properties of initialState.
         program: action.payload
+      };
+    case GET_PROGRAM_DETAIL:
+      return {
+        ...state, // gets all properties of initialState.
+        programDetail: action.payload
       };
     // case DELETE_PROGRAM:
     //   return {

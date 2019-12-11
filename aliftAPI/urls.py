@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import include, path
 from rest_framework import routers
 from core import views
+from core.stored_procs import sp_views
 
 router = routers.DefaultRouter()
 router.register(r'profiles', views.ProfileViewSet)
@@ -26,12 +27,14 @@ router.register(r'exercises', views.ExerciseViewSet)
 router.register(r'exerciseSetDetail', views.ExerciseRepsViewSet)
 router.register(r'exerciseWeight', views.ExerciseWeightViewSet)
 
+
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include('frontend.urls')),
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('', include('accounts.urls')),
+    path('proc/', include('core.stored_procs.urls')),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

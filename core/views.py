@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from .models import Program, Exercise, MuscleGroup, ExerciseSetDetail, ExerciseWeight, Profile
 from rest_framework import viewsets, permissions
 from core.serializers import ProgramSerializer, ExerciseSerializer, MuscleGroupSerializer, ExerciseRepsSerializer, ExerciseWeightSerializer, ProfileSerializer
+from django.db import connection
 
 
 class ProfileViewSet(viewsets.ModelViewSet):

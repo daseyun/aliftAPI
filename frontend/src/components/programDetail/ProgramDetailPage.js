@@ -6,7 +6,7 @@ import ProgramExercises from "./ProgramExercises";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
-import { getProgram } from "../../actions/programDetail";
+import { getProgram, getProgramDetail } from "../../actions/programDetail";
 
 export class ProgramDetailPage extends Component {
   constructor(props) {
@@ -17,10 +17,15 @@ export class ProgramDetailPage extends Component {
     };
   }
 
+  ready = () => {
+    console.log("program: ", this.props.program);
+    console.log(this.props.programDetail);
+  };
+
   componentDidMount() {
     // get current program
-    console.log(this.props);
     this.props.getProgram(this.props.match.params.programId);
+    this.props.getProgramDetail(this.props.match.params.programId);
 
     // this.sleep(500).then(() => {
     //   //do stuff
@@ -30,7 +35,8 @@ export class ProgramDetailPage extends Component {
 
   render() {
     const { programId } = this.props.match.params;
-    if (this.props.program) {
+    if (this.props.program && this.props.programDetail) {
+      this.ready();
       return (
         <Fragment>
           {/* TODO: get program name via query */}
@@ -59,10 +65,11 @@ export class ProgramDetailPage extends Component {
 // export default ProgramDetailPage;
 
 const mapStateToProps = state => ({
-  program: state.programDetail.program // state,programs calls the reducer. second .program calls the property in the reducer.
+  program: state.programDetail.program, // state,programs calls the reducer. second .program calls the property in the reducer.
+  programDetail: state.programDetail.programDetail
 });
 
 export default connect(
   mapStateToProps,
-  { getProgram } // this gives us access to these props to use above.
+  { getProgram, getProgramDetail } // this gives us access to these props to use above.
 )(ProgramDetailPage); // wrapped in connect for redux

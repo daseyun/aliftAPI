@@ -14,7 +14,7 @@ import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM } from "./types";
 // dispatched to reducer. (/reducers/programs.js)
 export const getPrograms = () => (dispatch, getState) => {
   axios
-    .get("/programs/", tokenConfig(getState)) // pass in: tokenConfig(getState) for any protected route.
+    .get("/api/programs/", tokenConfig(getState)) // pass in: tokenConfig(getState) for any protected route.
     .then(res => {
       dispatch({
         type: GET_PROGRAMS,
@@ -30,7 +30,7 @@ export const getPrograms = () => (dispatch, getState) => {
 // DELETE PROGRAM
 export const deleteProgram = id => (dispatch, getState) => {
   axios
-    .delete(`/programs/${id}/`, tokenConfig(getState))
+    .delete(`/api/programs/${id}/`, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ deleteProgram: "Program Deleted" }));
       dispatch({
@@ -45,7 +45,7 @@ export const deleteProgram = id => (dispatch, getState) => {
 export const addProgram = program => (dispatch, getState) => {
   console.log(tokenConfig(getState));
   axios
-    .post(`/programs/`, program, tokenConfig(getState))
+    .post(`/api/programs/`, program, tokenConfig(getState))
     .then(res => {
       dispatch(createMessage({ addProgram: "Program Added" }));
       dispatch({
