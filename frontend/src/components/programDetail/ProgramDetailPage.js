@@ -11,7 +11,9 @@ import { getProgram, getProgramDetail } from "../../actions/programDetail";
 export class ProgramDetailPage extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { isEditState: false };
+
+    this.handleEditStateChange = this.handleEditStateChange.bind(this);
     this.sleep = milliseconds => {
       return new Promise(resolve => setTimeout(resolve, milliseconds));
     };
@@ -21,7 +23,12 @@ export class ProgramDetailPage extends Component {
     console.log("program: ", this.props.program);
     console.log(this.props.programDetail);
   };
+  handleEditStateChange = value => {
+    this.setState({ isEditState: !this.state.isEditState });
+    // console.log("handleChange", this.state.isEditState);
 
+    // this.setState({ value });
+  };
   componentDidMount() {
     // get current program
     this.props.getProgram(this.props.match.params.programId);
@@ -36,7 +43,7 @@ export class ProgramDetailPage extends Component {
   render() {
     const { programId } = this.props.match.params;
     if (this.props.program && this.props.programDetail) {
-      this.ready();
+      // this.ready();
       return (
         <Fragment>
           {/* TODO: get program name via query */}
@@ -45,16 +52,25 @@ export class ProgramDetailPage extends Component {
           <ProgramExercises
             programId={programId}
             programDetail={this.props.programDetail}
+            isEditState={this.state.isEditState}
+            onEditStateChange={this.handleEditStateChange}
           />
 
-          <div className="text-info">
-            //start workout button goes to another page for recording
-            ExerciseWeight Table
-          </div>
+          {this.state.isEditState ? (
+            <button className={"btn btn-primary btn-lg btn-block"}>
+              Add Exercise
+            </button>
+          ) : null}
+
           {/* TODO: build new page for this later (or load new js stuff) 
         Loading new js stuff might be faster and cleaner code and looks wise*/}
-          <button disabled className="btn btn-primary btn-lg btn-block">
-            Start Workout
+          <button
+            className={
+              "btn btn-primary btn-lg btn-block " +
+              (this.state.isEditState ? "btn-warning" : "btn-success")
+            }
+          >
+            {this.state.isEditState ? "Save Changes" : "Start Workout"}
           </button>
         </Fragment>
       );

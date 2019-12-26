@@ -19,12 +19,9 @@ export class Header extends Component {
           <strong>{user ? `${user.username}` : ""}</strong>
         </span>
         <li className="nav-item">
-          <button
-            onClick={this.props.logout}
-            className="nav-link btn btn-info btn-sm text-light"
-          >
+          <a href="" onClick={this.props.logout} className="nav-link ">
             Logout
-          </button>
+          </a>
         </li>
       </ul>
     );
@@ -123,7 +120,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(
-  mapStateToProps,
-  { logout }
-)(Header);
+export default connect(mapStateToProps, { logout })(Header);

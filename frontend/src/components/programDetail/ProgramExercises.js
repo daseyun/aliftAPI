@@ -1,25 +1,22 @@
 import React, { Component } from "react";
 
 export class ProgramExercises extends Component {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick = e => {
+    this.setState({ isEditState: true });
+
+    this.props.onEditStateChange(e.target.value);
+  };
+
   render() {
-    console.log(this.props.programDetail);
-    // if (this.state.programDetail) {
-    //   console.log(this.state.programDetail.programDetail);
-    // }
-    //   const list = this.state.programDetail.programDetail.map((invoice, index) => {
-    //     return (
-    //         <tr key={index}>
-    //             <td>{invoice[index].description}</td>
-    //             <td>{invoice[index].unit}</td>
-    //             <td>{invoice[index].quantity}</td>
-    //             <td>{invoice[index].unit * invoice[index].quantity}</td>
-    //         </tr>
-    //     )
-    // });
+    // console.log(this.props.programDetail);
 
     const programDetail = this.props.programDetail.map(
       (exercise, exercise_id) => {
-        console.log(exercise);
         // var exercise_id = exercise_id - 1;
         return (
           <tr key={exercise_id}>
@@ -39,17 +36,17 @@ export class ProgramExercises extends Component {
 
     return (
       <div>
-        <div>[debug: id: {this.props.programId}]</div>
-        <div>this is list of exercises/ 4x5 in this program</div>
-
         <table className="table">
           <thead>
             <tr>
               <th scope="col">Exercise</th>
               <th scope="col">Sets/Reps</th>
               <th scope="col">
-                <button disabled className="btn btn-sm btn-primary">
-                  Edit Program
+                <button
+                  className="btn btn-sm btn-primary"
+                  onClick={this.handleClick.bind(this)}
+                >
+                  Edit
                 </button>{" "}
               </th>
             </tr>

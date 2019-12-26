@@ -28,3 +28,17 @@ LANGUAGE sql;
       
 select get_program_detail(25);
 select get_program_detail(1);
+
+-- 
+
+DROP FUNCTION get_exercises();
+CREATE or REPLACE FUNCTION get_exercises()
+RETURNS TABLE(exercise_id int, exercise_name text, exercise_description text) AS
+$BODY$
+	SELECT
+		id, exercise_name, exercise_description
+	FROM core_exercise;
+$BODY$
+LANGUAGE SQL;
+
+select get_exercises();
