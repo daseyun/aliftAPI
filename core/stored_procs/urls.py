@@ -14,7 +14,7 @@ urlpatterns = [
 
     # path(r'^my_page/$', test)
     path(r'get-program/<int:program_id>', sp_views.get_program),
-    path(r'get-program-detail/<int:program_id>', sp_views.get_program_detail)
-
+    path(r'get-program-detail/<int:program_id>', sp_views.get_program_detail),
+    path(r'get-exercises/', sp_views.get_exercises)
 
 ]

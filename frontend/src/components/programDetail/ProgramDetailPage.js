@@ -7,6 +7,7 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
 import { getProgram, getProgramDetail } from "../../actions/programDetail";
+import { getExercises } from "../../actions/exercises";
 
 export class ProgramDetailPage extends Component {
   constructor(props) {
@@ -20,8 +21,10 @@ export class ProgramDetailPage extends Component {
   }
 
   ready = () => {
+    console.log("ready");
     console.log("program: ", this.props.program);
     console.log(this.props.programDetail);
+    console.log("exercises", this.props);
   };
   handleEditStateChange = value => {
     this.setState({ isEditState: !this.state.isEditState });
@@ -30,7 +33,9 @@ export class ProgramDetailPage extends Component {
     // this.setState({ value });
   };
   componentDidMount() {
+    console.log(this.state);
     // get current program
+    this.props.getExercises(); // TODO: NEW
     this.props.getProgram(this.props.match.params.programId);
     this.props.getProgramDetail(this.props.match.params.programId);
 
@@ -40,10 +45,41 @@ export class ProgramDetailPage extends Component {
     // });
   }
 
+  formatExerciseSelect(exercises) {
+    const select = exercises.map((exercise, exercise_id) => {
+      return (
+        <option key={exercise_id} value="exercise_id">
+          {exercise.exercise_name}
+        </option>
+      );
+    });
+    return select;
+  }
+
+  addExerciseRow = e => {
+    console.log("addexercisebuttonpressed");
+    var exercises = this.formatExerciseSelect(this.props.exercises);
+    var newRow = {
+      exercise_id: null,
+      exercise_name: <select className="form-control">{exercises}</select>,
+      sets: <input size="2"></input>,
+      reps: <input size="2"></input>
+    };
+    var exercises = this.props.programDetail;
+    exercises.push(newRow);
+    this.setState(this.state);
+    console.log(this.state);
+    console.log(this.props);
+  };
+
   render() {
     const { programId } = this.props.match.params;
-    if (this.props.program && this.props.programDetail) {
-      // this.ready();
+    if (
+      this.props.program &&
+      this.props.programDetail &&
+      this.props.exercises
+    ) {
+      this.ready();
       return (
         <Fragment>
           {/* TODO: get program name via query */}
@@ -57,7 +93,10 @@ export class ProgramDetailPage extends Component {
           />
 
           {this.state.isEditState ? (
-            <button className={"btn btn-primary btn-lg btn-block"}>
+            <button
+              className={"btn btn-primary btn-lg btn-block"}
+              onClick={this.addExerciseRow.bind(this)}
+            >
               Add Exercise
             </button>
           ) : null}
@@ -85,10 +124,11 @@ export class ProgramDetailPage extends Component {
 
 const mapStateToProps = state => ({
   program: state.programDetail.program, // state,programs calls the reducer. second .program calls the property in the reducer.
-  programDetail: state.programDetail.programDetail
+  programDetail: state.programDetail.programDetail,
+  exercises: state.exercises.exercises
 });
 
 export default connect(
   mapStateToProps,
-  { getProgram, getProgramDetail } // this gives us access to these props to use above.
+  { getProgram, getProgramDetail, getExercises } // this gives us access to these props to use above.
 )(ProgramDetailPage); // wrapped in connect for redux

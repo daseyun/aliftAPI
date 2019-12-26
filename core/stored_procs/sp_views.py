@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from ..models import Program, Exercise, MuscleGroup, ExerciseSetDetail, ExerciseWeight, Profile
 from rest_framework import viewsets, permissions
-from core.serializers import ProgramSerializer, ExerciseSerializer, MuscleGroupSerializer, ExerciseSetDetailSerializer, ExerciseWeightSerializer, ProfileSerializer
 from django.db import connection
 
 from django.http import JsonResponse
@@ -36,6 +35,24 @@ def get_program_detail(request, program_id):
         results = c.fetchall()
         row_headers = [x[0] for x in c.description]
 
+        c.execute("COMMIT")
+    finally:
+        c.close()
+    json_data = []
+    for result in results:
+        json_data.append(dict(zip(row_headers, result)))
+    print(json_data)
+
+    return JsonResponse(json_data, safe=False)
+
+
+def get_exercises(request):
+    c = connection.cursor()
+    try:
+        c.execute("BEGIN")
+        c.callproc("get_exercises")
+        results = c.fetchall()
+        row_headers = [x[0] for x in c.description]
         c.execute("COMMIT")
     finally:
         c.close()

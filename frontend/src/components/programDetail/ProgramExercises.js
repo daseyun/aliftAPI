@@ -12,27 +12,40 @@ export class ProgramExercises extends Component {
     this.props.onEditStateChange(e.target.value);
   };
 
+  mapProgramToTable(programDetail) {
+    const table = programDetail.map((exercise, exercise_id) => {
+      if (exercise.exercise_id === null) {
+        console.log("@@@@@@@@@");
+      }
+      return (
+        <tr key={exercise_id}>
+          <th scope="row">
+            {exercise.exercise_name}
+
+            {/* {exercise_id === 4 ? "Empty" : exercise.exercise_name} */}
+          </th>
+          <td>
+            {exercise.sets} x {exercise.reps}
+          </td>
+          <td>
+            {/* <button hidden disabled className="btn btn-sm btn-primary"> */}
+            <button
+              style={{ display: this.props.isEditState ? "block" : "none" }}
+              className={"btn btn-sm btn-danger disabled"}
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      );
+    });
+    return table;
+  }
+
   render() {
     // console.log(this.props.programDetail);
 
-    const programDetail = this.props.programDetail.map(
-      (exercise, exercise_id) => {
-        // var exercise_id = exercise_id - 1;
-        return (
-          <tr key={exercise_id}>
-            <th scope="row">{exercise.exercise_name}</th>
-            <td>
-              {exercise.sets} x {exercise.reps}
-            </td>
-            <td>
-              <button hidden disabled className="btn btn-sm btn-primary">
-                Edit
-              </button>
-            </td>
-          </tr>
-        );
-      }
-    );
+    const programDetail = this.mapProgramToTable(this.props.programDetail);
 
     return (
       <div>
