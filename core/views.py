@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from .models import Program, Exercise, MuscleGroup, ExerciseSetDetail, ExerciseWeight, Profile
 from rest_framework import viewsets, permissions
-from core.serializers import ProgramSerializer, ExerciseSerializer, MuscleGroupSerializer, ExerciseRepsSerializer, ExerciseWeightSerializer, ProfileSerializer
+from core.serializers import ProgramSerializer, ExerciseSerializer, MuscleGroupSerializer, ExerciseSetDetailSerializer, ExerciseWeightSerializer, ProfileSerializer
 from django.db import connection
 
 
@@ -43,12 +43,12 @@ class ExerciseViewSet(viewsets.ModelViewSet):
     serializer_class = ExerciseSerializer
 
 
-class ExerciseRepsViewSet(viewsets.ModelViewSet):
+class ExerciseSetDetailViewSet(viewsets.ModelViewSet):
     queryset = ExerciseSetDetail.objects.all()
     permission_classes = [
         permissions.AllowAny
     ]
-    serializer_class = ExerciseRepsSerializer
+    serializer_class = ExerciseSetDetailSerializer
 
 
 class ExerciseWeightViewSet(viewsets.ModelViewSet):

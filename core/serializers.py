@@ -38,14 +38,14 @@ class ProgramSerializer(serializers.ModelSerializer):
         fields = ['id', 'program_name', 'owner', 'exerciseSetDetail']
 
 
-class ExerciseRepsSerializer(serializers.ModelSerializer):
+class ExerciseSetDetailSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField()
     # exerciseWeights = serializers.ReadOnlyField()
 
     class Meta:
         model = ExerciseSetDetail
         fields = ['url', 'id', 'sets', 'reps',
-                  'program', 'exercise', 'exerciseWeights']
+                  'program', 'exercise', 'exerciseWeights', 'exercise_order']
         read_only_fields = ['exerciseWeights']
 
 

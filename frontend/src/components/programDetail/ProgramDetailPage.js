@@ -42,7 +42,10 @@ export class ProgramDetailPage extends Component {
           {/* TODO: get program name via query */}
           <h3>{this.props.program.program_name}</h3>
           {/* TODO: get exercise set details via query */}
-          <ProgramExercises programId={programId} />
+          <ProgramExercises
+            programId={programId}
+            programDetail={this.props.programDetail}
+          />
 
           <div className="text-info">
             //start workout button goes to another page for recording

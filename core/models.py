@@ -34,7 +34,7 @@ class Program(models.Model):
 # Stores information of a set for an exercise. To be used with Program.
 
 
-class ExerciseSetDetail(models.Model):
+class ExerciseSetDetail(models.Model):  # ExerciseReps
     program = models.ForeignKey(
         Program, related_name='exerciseSetDetail', on_delete=models.SET_NULL, null=True)
     exercise = models.ForeignKey(
@@ -43,6 +43,8 @@ class ExerciseSetDetail(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(1000)], null=True)
     reps = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(1000)], null=True)
+    exercise_order = models.IntegerField(
+        validators=[MinValueValidator(0), MaxValueValidator(3000)], null=True)
 
 # Stores information about user's set performance. (ExerciseReps must exist before ExerciseWeight)
 
