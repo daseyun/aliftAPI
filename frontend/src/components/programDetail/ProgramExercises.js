@@ -13,12 +13,11 @@ export class ProgramExercises extends Component {
   };
 
   mapProgramToTable(programDetail) {
-    const table = programDetail.map((exercise, exercise_id) => {
+    const table = programDetail.map((exercise, index) => {
       if (exercise.exercise_id === null) {
-        console.log("@@@@@@@@@");
       }
       return (
-        <tr key={exercise_id}>
+        <tr key={index}>
           <th scope="row">
             {exercise.exercise_name}
 
@@ -30,8 +29,10 @@ export class ProgramExercises extends Component {
           <td>
             {/* <button hidden disabled className="btn btn-sm btn-primary"> */}
             <button
+              id={exercise.exercise_set_detail_id}
               style={{ display: this.props.isEditState ? "block" : "none" }}
-              className={"btn btn-sm btn-danger disabled"}
+              className={"btn btn-sm btn-danger"}
+              onClick={this.props.deleteExercise.bind(this)}
             >
               Delete
             </button>

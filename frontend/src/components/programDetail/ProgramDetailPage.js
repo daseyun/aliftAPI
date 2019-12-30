@@ -6,13 +6,18 @@ import ProgramExercises from "./ProgramExercises";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { Redirect } from "react-router-dom";
-import { getProgram, getProgramDetail } from "../../actions/programDetail";
+import {
+  getProgram,
+  getProgramDetail,
+  updateProgramDetail,
+  deleteExerciseSetDetail
+} from "../../actions/programDetail";
 import { getExercises } from "../../actions/exercises";
 
 export class ProgramDetailPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { isEditState: false };
+    this.state = { isEditState: false, exercisesToDelete: [] };
 
     this.handleEditStateChange = this.handleEditStateChange.bind(this);
     this.sleep = milliseconds => {
@@ -22,9 +27,10 @@ export class ProgramDetailPage extends Component {
 
   ready = () => {
     console.log("ready");
-    console.log("program: ", this.props.program);
-    console.log(this.props.programDetail);
-    console.log("exercises", this.props);
+    console.log(this.props);
+    // console.log("program: ", this.props.program);
+    // console.log(this.props.programDetail);
+    // console.log("exercises", this.props.exercises);
   };
   handleEditStateChange = value => {
     this.setState({ isEditState: !this.state.isEditState });
@@ -33,7 +39,7 @@ export class ProgramDetailPage extends Component {
     // this.setState({ value });
   };
   componentDidMount() {
-    console.log(this.state);
+    // console.log(this.state);
     // get current program
     this.props.getExercises(); // TODO: NEW
     this.props.getProgram(this.props.match.params.programId);
@@ -46,9 +52,9 @@ export class ProgramDetailPage extends Component {
   }
 
   formatExerciseSelect(exercises) {
-    const select = exercises.map((exercise, exercise_id) => {
+    const select = exercises.map((exercise, index) => {
       return (
-        <option key={exercise_id} value="exercise_id">
+        <option key={index} value={exercise.exercise_id}>
           {exercise.exercise_name}
         </option>
       );
@@ -56,21 +62,113 @@ export class ProgramDetailPage extends Component {
     return select;
   }
 
-  addExerciseRow = e => {
-    console.log("addexercisebuttonpressed");
-    var exercises = this.formatExerciseSelect(this.props.exercises);
-    var newRow = {
-      exercise_id: null,
-      exercise_name: <select className="form-control">{exercises}</select>,
-      sets: <input size="2"></input>,
-      reps: <input size="2"></input>
-    };
-    var exercises = this.props.programDetail;
-    exercises.push(newRow);
-    this.setState(this.state);
-    console.log(this.state);
-    console.log(this.props);
+  handleExerciseInputChange = event => {
+    var changedRow = event.target.id;
+    var exerciseId = parseInt(event.target.value);
+    var exerciseName = null;
+    for (var i in this.props.exercises) {
+      if (this.props.exercises[i].exercise_id === exerciseId) {
+        exerciseName = this.props.exercises[i].exercise_name;
+      }
+    }
+    this.props.programDetail[changedRow].exercise_id = exerciseId;
+    this.props.programDetail[changedRow].exercise_name = exerciseName;
   };
+
+  handleSetInputChange = event => {
+    var changedRow = event.target.id;
+    var newValue = event.target.value;
+
+    this.props.programDetail[changedRow].sets = newValue;
+  };
+
+  handleRepInputChange = event => {
+    var changedRow = event.target.id;
+    var newValue = event.target.value;
+    this.props.programDetail[changedRow].reps = newValue;
+  };
+
+  getNumOfRows() {
+    return this.props.programDetail.length;
+  }
+
+  addExerciseRow = e => {
+    // for presetting unselected exercise
+    var emptyExercise = {
+      exercise_id: null
+    };
+    this.props.exercises.unshift(emptyExercise);
+    var exercises = this.formatExerciseSelect(this.props.exercises);
+
+    var newRow = {
+      exercise_set_detail_id: null,
+      exercise_id: null,
+      exercise_name: (
+        <select
+          id={this.getNumOfRows()}
+          onChange={this.handleExerciseInputChange}
+          className="form-control"
+        >
+          {exercises}
+        </select>
+      ),
+      sets: (
+        <input
+          id={this.getNumOfRows()}
+          onChange={this.handleSetInputChange}
+          size="2"
+        ></input>
+      ),
+      reps: (
+        <input
+          id={this.getNumOfRows()}
+          onChange={this.handleRepInputChange}
+          size="2"
+        ></input>
+      ),
+      exercise_order: this.getNumOfRows() + 1
+    };
+    var programExercises = this.props.programDetail;
+    programExercises.push(newRow);
+
+    this.props.programDetail[this.getNumOfRows() - 1].order = this.getNumOfRows;
+
+    this.setState(this.state);
+  };
+
+  deleteExercise = e => {
+    var exercise_set_detail_id = parseInt(event.target.id);
+    // console.log(changedRow);
+    // console.log(event.target);
+
+    var toDelete = this.state.exercisesToDelete.concat(exercise_set_detail_id);
+    console.log(this.props.programDetail);
+
+    // reflect on view
+    for (var i in this.props.programDetail) {
+      console.log(";", i, this.props.programDetail[i].exercise_set_detail_id);
+      if (
+        this.props.programDetail[i].exercise_set_detail_id ===
+        exercise_set_detail_id
+      ) {
+        this.props.programDetail.splice(i, 1);
+      }
+    }
+    this.setState({ exercisesToDelete: toDelete });
+  };
+
+  startWorkout() {
+    console.log("START WORKOUT");
+  }
+
+  saveProgramChanges() {
+    console.log("SAVE PROGRAMs");
+    console.log(this.props.programDetail);
+    console.log("state", this.state.exercisesToDelete);
+
+    this.props.deleteExerciseSetDetail(this.state.exercisesToDelete);
+    this.props.updateProgramDetail(this.props.programDetail);
+  }
 
   render() {
     const { programId } = this.props.match.params;
@@ -90,6 +188,7 @@ export class ProgramDetailPage extends Component {
             programDetail={this.props.programDetail}
             isEditState={this.state.isEditState}
             onEditStateChange={this.handleEditStateChange}
+            deleteExercise={this.deleteExercise}
           />
 
           {this.state.isEditState ? (
@@ -107,6 +206,11 @@ export class ProgramDetailPage extends Component {
             className={
               "btn btn-primary btn-lg btn-block " +
               (this.state.isEditState ? "btn-warning" : "btn-success")
+            }
+            onClick={
+              this.state.isEditState
+                ? this.saveProgramChanges.bind(this)
+                : this.startWorkout.bind(this)
             }
           >
             {this.state.isEditState ? "Save Changes" : "Start Workout"}
@@ -130,5 +234,11 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getProgram, getProgramDetail, getExercises } // this gives us access to these props to use above.
+  {
+    getProgram,
+    getProgramDetail,
+    getExercises,
+    updateProgramDetail,
+    deleteExerciseSetDetail
+  } // this gives us access to these props to use above.
 )(ProgramDetailPage); // wrapped in connect for redux

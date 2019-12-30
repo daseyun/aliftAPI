@@ -26,6 +26,7 @@ export class Alerts extends Component {
       if (message.deleteProgram) alert.success(message.deleteProgram);
       if (message.addProgram) alert.success(message.addProgram);
       if (message.passwordsNotMatch) alert.error(message.passwordsNotMatch);
+      if (message.updateProgram) alert.success(message.updateProgram);
     }
   }
 

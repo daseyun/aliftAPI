@@ -6,7 +6,12 @@ import axios from "axios";
 import { createMessage, returnErrors } from "./messages";
 import { tokenConfig } from "./auth";
 
-import { GET_PROGRAM, GET_PROGRAM_DETAIL } from "./types";
+import {
+  GET_PROGRAM,
+  GET_PROGRAM_DETAIL,
+  UPDATE_PROGRAM_DETAIL,
+  DELETE_EXERCISE_SET_DETAIL
+} from "./types";
 
 // GET PROGRAMS
 
@@ -21,7 +26,6 @@ export const getProgram = id => (dispatch, getState) => {
         payload: res.data //reducer is expecting a type. in /reducers/programs.js
       });
     })
-
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))
     );
@@ -37,6 +41,46 @@ export const getProgramDetail = id => (dispatch, getState) => {
       });
     })
 
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const updateProgramDetail = programDetails => (dispatch, getState) => {
+  axios
+    .post(
+      `/proc/update-program-details/`,
+      programDetails,
+      tokenConfig(getState)
+    )
+    .then(res => {
+      dispatch(createMessage({ updateProgram: "Program Updated" }));
+      dispatch({
+        type: UPDATE_PROGRAM_DETAIL,
+        payload: res.data
+      });
+    })
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const deleteExerciseSetDetail = exercise_set_detail_ids => (
+  dispatch,
+  getState
+) => {
+  axios
+    .post(
+      `/proc/delete-exerciseSetDetail/`,
+      exercise_set_detail_ids,
+      tokenConfig(getState)
+    )
+    .then(res => {
+      dispatch({
+        type: DELETE_EXERCISE_SET_DETAIL,
+        payload: res.data
+      });
+    })
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))
     );

@@ -12,6 +12,5 @@ export default combineReducers({
   messages: messages,
   programDetail: programDetail,
   exercises: exercises,
-
   auth
 });
