@@ -17,6 +17,8 @@ urlpatterns = [
     path(r'get-program-detail/<int:program_id>', sp_views.get_program_detail),
     path(r'get-exercises/', sp_views.get_exercises),
     path(r'update-program-details/', sp_views.update_program_detail),
-    path(r'delete-exerciseSetDetail/', sp_views.delete_exerciseSetDetail)
+    path(r'delete-exerciseSetDetail/', sp_views.delete_exerciseSetDetail),
+    path(r'toggle-program-active/<int:program_id>', sp_views.toggleProgramActive),
+
 
 ]

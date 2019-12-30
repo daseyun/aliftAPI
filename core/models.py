@@ -30,6 +30,7 @@ class Program(models.Model):
     program_name = models.CharField(max_length=100)
     owner = models.ForeignKey(
         User, related_name='programs', on_delete=models.SET_NULL, null=True)
+    isActive = models.BooleanField(default=True)
 
 # Stores information of a set for an exercise. To be used with Program.
 

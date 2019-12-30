@@ -6,7 +6,12 @@ import axios from "axios";
 import { createMessage, returnErrors } from "./messages";
 import { tokenConfig } from "./auth";
 
-import { GET_PROGRAMS, DELETE_PROGRAM, ADD_PROGRAM } from "./types";
+import {
+  GET_PROGRAMS,
+  DELETE_PROGRAM,
+  ADD_PROGRAM,
+  TOGGLE_PROGRAM_ACTIVE
+} from "./types";
 
 // GET PROGRAMS
 
@@ -53,6 +58,26 @@ export const addProgram = program => (dispatch, getState) => {
         payload: res.data
       });
     })
+    .catch(err =>
+      dispatch(returnErrors(err.response.data, err.response.status))
+    );
+};
+
+export const toggleProgramActive = programId => (dispatch, getState) => {
+  console.log(programId);
+  axios
+    .get(
+      "/proc/toggle-program-active/" + programId,
+      +"/",
+      tokenConfig(getState)
+    ) // pass in: tokenConfig(getState) for any protected route.
+    .then(res => {
+      dispatch({
+        type: TOGGLE_PROGRAM_ACTIVE,
+        payload: res.data //reducer is expecting a type. in /reducers/programs.js
+      });
+    })
+
     .catch(err =>
       dispatch(returnErrors(err.response.data, err.response.status))
     );

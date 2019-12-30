@@ -12,6 +12,7 @@ import {
   updateProgramDetail,
   deleteExerciseSetDetail
 } from "../../actions/programDetail";
+import { toggleProgramActive } from "../../actions/programs";
 import { getExercises } from "../../actions/exercises";
 
 export class ProgramDetailPage extends Component {
@@ -28,7 +29,7 @@ export class ProgramDetailPage extends Component {
   ready = () => {
     console.log("ready");
     console.log(this.props);
-    // console.log("program: ", this.props.program);
+    console.log("program: ", this.props.program);
     // console.log(this.props.programDetail);
     // console.log("exercises", this.props.exercises);
   };
@@ -157,6 +158,12 @@ export class ProgramDetailPage extends Component {
     this.setState({ exercisesToDelete: toDelete });
   };
 
+  toggleProgramActive = e => {
+    this.props.program.isactive = !this.props.program.isactive;
+    this.props.toggleProgramActive(this.props.program.id);
+    this.setState(this);
+  };
+
   startWorkout() {
     console.log("START WORKOUT");
   }
@@ -168,6 +175,7 @@ export class ProgramDetailPage extends Component {
 
     this.props.deleteExerciseSetDetail(this.state.exercisesToDelete);
     this.props.updateProgramDetail(this.props.programDetail);
+    this.setState({ isEditState: false });
   }
 
   render() {
@@ -181,7 +189,25 @@ export class ProgramDetailPage extends Component {
       return (
         <Fragment>
           {/* TODO: get program name via query */}
-          <h3>{this.props.program.program_name}</h3>
+          <div className="d-flex flex-row">
+            <div className="p-2">
+              <h3>{this.props.program.program_name}</h3>
+            </div>
+
+            <div className="d-flex align-items-center">
+              <h4>
+                <i
+                  onClick={this.toggleProgramActive.bind(this)}
+                  className={
+                    this.props.program.isactive
+                      ? "fa fa-star text-warning "
+                      : "fa fa-star-o text-warning"
+                  }
+                ></i>
+              </h4>
+            </div>
+          </div>
+
           {/* TODO: get exercise set details via query */}
           <ProgramExercises
             programId={programId}
@@ -239,6 +265,7 @@ export default connect(
     getProgramDetail,
     getExercises,
     updateProgramDetail,
-    deleteExerciseSetDetail
+    deleteExerciseSetDetail,
+    toggleProgramActive
   } // this gives us access to these props to use above.
 )(ProgramDetailPage); // wrapped in connect for redux

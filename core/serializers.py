@@ -33,9 +33,8 @@ class ProgramSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Program
-        # fields = ['url', 'id', 'program_name', 'owner', 'exerciseReps']
-        # fields = ['id','program_name','owner','exerciseReps']
-        fields = ['id', 'program_name', 'owner', 'exerciseSetDetail']
+        fields = ['id', 'program_name', 'owner',
+                  'exerciseSetDetail', 'isActive']
 
 
 class ExerciseSetDetailSerializer(serializers.ModelSerializer):

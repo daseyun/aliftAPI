@@ -126,7 +126,16 @@ def delete_exerciseSetDetail(request):
                 c.execute("COMMIT")
             finally:
                 c.close()
-            # json_data = []
-            # for num in body:
-            #     json_data.append({"exercise_set_detail_id": num})
         return JsonResponse(body, safe=False)
+
+
+def toggleProgramActive(request, program_id):
+    c = connection.cursor()
+    try:
+        c.execute("BEGIN")
+        c.callproc("toggle_program_active", [program_id, ])
+        c.execute("COMMIT")
+    finally:
+        c.close()
+
+    return HttpResponse(status=200)
