@@ -1,14 +1,28 @@
 
 DROP FUNCTION get_program(integer);
 CREATE OR REPLACE FUNCTION get_program(program_id int) 
-RETURNS TABLE(id int, program_name varchar) as
+RETURNS TABLE(id int, program_name varchar, isActive boolean) as
 $BODY$   
-    select p.id, p.program_name from core_program p where p.id = program_id; 
+    select id, program_name, "isActive" from core_program where id = program_id; 
 $BODY$
 LANGUAGE sql;
       
 select get_program(3);
+
+select * from core_program;
       
+DROP FUNCTION toggle_program_active(integer);
+CREATE OR REPLACE FUNCTION toggle_program_active(program_id int)
+RETURNS VOID AS $$
+        BEGIN
+        UPDATE core_program
+	SET "isActive" = NOT "isActive"	
+	WHERE id = program_id;
+		
+    END;
+$$ LANGUAGE plpgsql;
+
+select toggle_program_active(1);
 --
 DROP FUNCTION get_program_detail(integer);
 CREATE or replace function get_program_detail(input_program_id int)
