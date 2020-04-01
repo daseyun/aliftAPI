@@ -31,6 +31,7 @@ class Program(models.Model):
     owner = models.ForeignKey(
         User, related_name='programs', on_delete=models.SET_NULL, null=True)
     isActive = models.BooleanField(default=True)
+    workout_started = models.BooleanField(default=False)
 
 # Stores information of a set for an exercise. To be used with Program.
 

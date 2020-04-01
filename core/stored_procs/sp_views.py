@@ -139,3 +139,15 @@ def toggleProgramActive(request, program_id):
         c.close()
 
     return HttpResponse(status=200)
+
+
+# def toggleProgramActive(request, program_id):
+#     c = connection.cursor()
+#     try:
+#         c.execute("BEGIN")
+#         c.callproc("toggle_program_workout_started", [program_id, ])
+#         c.execute("COMMIT")
+#     finally:
+#         c.close()
+
+#     return HttpResponse(status=200)

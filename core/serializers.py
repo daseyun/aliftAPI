@@ -34,7 +34,7 @@ class ProgramSerializer(serializers.ModelSerializer):
     class Meta:
         model = Program
         fields = ['id', 'program_name', 'owner',
-                  'exerciseSetDetail', 'isActive']
+                  'exerciseSetDetail', 'isActive', 'workout_started']
 
 
 class ExerciseSetDetailSerializer(serializers.ModelSerializer):

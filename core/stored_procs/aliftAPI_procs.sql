@@ -131,20 +131,10 @@ select * from core_exercisesetdetail where program_id = 25;
 
 
 -- DELETE
-DROP FUNCTION delete_exercise_set_detail(int);
-CREATE OR REPLACE FUNCTION delete_exercise_set_detail(i_exercise_set_detail_id int)
-RETURNS void 
-$BODY$
-
-	DELETE FROM core_exercisesetdetail
-	WHERE id = i_exercise_set_detail_id;
-
-$BODY$
-LANGUAGE sql;
 
 DROP FUNCTION delete_exercise_set_detail(int);
 CREATE OR REPLACE FUNCTION delete_exercise_set_detail(i_exercise_set_detail_id int)
-RETURNS INT AS $$
+RETURNS void AS $$
     #variable_conflict use_variable
     BEGIN
         DELETE FROM core_exercisesetdetail

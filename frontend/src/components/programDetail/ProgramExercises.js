@@ -57,10 +57,19 @@ export class ProgramExercises extends Component {
               <th scope="col">Sets/Reps</th>
               <th scope="col">
                 <button
-                  className="btn btn-sm btn-primary"
+                  className={
+                    "btn btn-sm " +
+                    (this.props.isEditState
+                      ? "btn-outline-danger"
+                      : "btn-outline-info")
+                  }
                   onClick={this.handleClick.bind(this)}
                 >
-                  Edit
+                  {this.props.isEditState ? (
+                    <i className="fa fa-ban"></i>
+                  ) : (
+                    <i className="fa fa-pencil"></i>
+                  )}
                 </button>{" "}
               </th>
             </tr>

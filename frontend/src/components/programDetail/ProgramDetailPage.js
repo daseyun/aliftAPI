@@ -14,11 +14,17 @@ import {
 } from "../../actions/programDetail";
 import { toggleProgramActive } from "../../actions/programs";
 import { getExercises } from "../../actions/exercises";
+import StartWorkout from "./StartWorkout";
 
 export class ProgramDetailPage extends Component {
   constructor(props) {
     super(props);
-    this.state = { isEditState: false, exercisesToDelete: [] };
+    this.state = {
+      isEditState: false,
+      exercisesToDelete: [],
+      isWorkoutInProgress: false,
+      newExercisesCt: -1
+    };
 
     this.handleEditStateChange = this.handleEditStateChange.bind(this);
     this.sleep = milliseconds => {
@@ -30,6 +36,7 @@ export class ProgramDetailPage extends Component {
     console.log("ready");
     console.log(this.props);
     console.log("program: ", this.props.program);
+    console.log("isworkoutinprogress", this.state.isWorkoutInProgress);
     // console.log(this.props.programDetail);
     // console.log("exercises", this.props.exercises);
   };
@@ -102,7 +109,7 @@ export class ProgramDetailPage extends Component {
     var exercises = this.formatExerciseSelect(this.props.exercises);
 
     var newRow = {
-      exercise_set_detail_id: null,
+      exercise_set_detail_id: this.state.newExercisesCt,
       exercise_id: null,
       exercise_name: (
         <select
@@ -134,14 +141,14 @@ export class ProgramDetailPage extends Component {
 
     this.props.programDetail[this.getNumOfRows() - 1].order = this.getNumOfRows;
 
-    this.setState(this.state);
+    this.setState({ newExercisesCt: this.state.newExercisesCt - 1 });
   };
 
   deleteExercise = e => {
     var exercise_set_detail_id = parseInt(event.target.id);
     // console.log(changedRow);
     // console.log(event.target);
-
+    console.log(exercise_set_detail_id);
     var toDelete = this.state.exercisesToDelete.concat(exercise_set_detail_id);
     console.log(this.props.programDetail);
 
@@ -165,7 +172,13 @@ export class ProgramDetailPage extends Component {
   };
 
   startWorkout() {
+    this.setState({ isWorkoutInProgress: true });
     console.log("START WORKOUT");
+  }
+
+  endWorkout() {
+    this.setState({ isWorkoutInProgress: false });
+    console.log("END WORKOUT");
   }
 
   saveProgramChanges() {
@@ -186,6 +199,14 @@ export class ProgramDetailPage extends Component {
       this.props.exercises
     ) {
       this.ready();
+      if (this.state.isWorkoutInProgress) {
+        console.log("7777");
+        return (
+          <Fragment>
+            <StartWorkout />
+          </Fragment>
+        );
+      }
       return (
         <Fragment>
           {/* TODO: get program name via query */}
@@ -231,7 +252,30 @@ export class ProgramDetailPage extends Component {
           <button
             className={
               "btn btn-primary btn-lg btn-block " +
-              (this.state.isEditState ? "btn-warning" : "btn-success")
+              (this.state.isEditState ? "d-none " : "") +
+              (this.state.isWorkoutInProgress ? "btn-danger " : "btn-success s")
+            }
+            onClick={
+              this.state.isWorkoutInProgress
+                ? this.endWorkout.bind(this)
+                : this.startWorkout.bind(this)
+            }
+          >
+            {this.state.isWorkoutInProgress ? "End Workout" : "Start Workout"}
+          </button>
+          <button
+            className={
+              "btn btn-primary btn-lg btn-block " +
+              (this.state.isEditState ? "btn-warning" : "d-none")
+            }
+            onClick={this.saveProgramChanges.bind(this)}
+          >
+            Save Changes
+          </button>
+          {/* <button
+            className={
+              "btn btn-primary btn-lg btn-block btn-danger " +
+              (this.state.isWorkoutInProgress ? "" : "d-none")
             }
             onClick={
               this.state.isEditState
@@ -239,8 +283,8 @@ export class ProgramDetailPage extends Component {
                 : this.startWorkout.bind(this)
             }
           >
-            {this.state.isEditState ? "Save Changes" : "Start Workout"}
-          </button>
+            End Workout
+          </button> */}
         </Fragment>
       );
     } else {
