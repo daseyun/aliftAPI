@@ -203,7 +203,20 @@ export class ProgramDetailPage extends Component {
         console.log("7777");
         return (
           <Fragment>
-            <StartWorkout />
+            <StartWorkout
+              programId={programId}
+              programDetail={this.props.programDetail}
+            />
+
+            {/* <button
+              className={
+                "btn btn-primary btn-lg btn-block " +
+                (this.state.isEditState ? "btn-warning" : "d-none")
+              }
+              onClick={this.saveProgramChanges.bind(this)}
+            >
+              Save Changes
+            </button> */}
           </Fragment>
         );
       }
@@ -272,19 +285,6 @@ export class ProgramDetailPage extends Component {
           >
             Save Changes
           </button>
-          {/* <button
-            className={
-              "btn btn-primary btn-lg btn-block btn-danger " +
-              (this.state.isWorkoutInProgress ? "" : "d-none")
-            }
-            onClick={
-              this.state.isEditState
-                ? this.saveProgramChanges.bind(this)
-                : this.startWorkout.bind(this)
-            }
-          >
-            End Workout
-          </button> */}
         </Fragment>
       );
     } else {

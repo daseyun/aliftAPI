@@ -15,6 +15,7 @@ export class ProgramExercises extends Component {
   mapProgramToTable(programDetail) {
     const table = programDetail.map((exercise, index) => {
       if (exercise.exercise_id === null) {
+        console.log("1231");
       }
       return (
         <tr key={index}>
