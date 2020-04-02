@@ -110,6 +110,7 @@ export class ProgramDetailPage extends Component {
 
     var newRow = {
       exercise_set_detail_id: this.state.newExercisesCt,
+      // exercise_set_detail_id: ,
       exercise_id: null,
       exercise_name: (
         <select
@@ -187,6 +188,12 @@ export class ProgramDetailPage extends Component {
     console.log("state", this.state.exercisesToDelete);
 
     this.props.deleteExerciseSetDetail(this.state.exercisesToDelete);
+
+    for (var i = 0; i < this.props.programDetail.length; i++) {
+      if (this.props.programDetail[i].exercise_set_detail_id < 0) {
+        this.props.programDetail[i].exercise_set_detail_id = null;
+      }
+    }
     this.props.updateProgramDetail(this.props.programDetail);
     this.setState({ isEditState: false });
   }
