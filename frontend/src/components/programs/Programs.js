@@ -30,8 +30,18 @@ export class Programs extends Component {
   }
 
   handleClick = e => {
+    // e.stopPropagation();
+    console.log("AIUBDSJKN");
+    console.log(e);
     this.setState({ redirectProgramId: e });
   };
+
+  deleteProgram1(e, program_id) {
+    console.log("12oinnekdlwn");
+    console.log("evennt", e, event);
+    e.stopPropagation();
+    return this.props.deleteProgram(program_id);
+  }
   render() {
     if (this.state.redirectProgramId) {
       return <Redirect push to={"/program/" + this.state.redirectProgramId} />;
@@ -52,6 +62,7 @@ export class Programs extends Component {
             {this.props.programs.map(program => (
               <tr
                 onClick={this.handleClick.bind(this, program.id)}
+                // onClick={e => this.handleClick.bind(this, e)}
                 key={program.id}
               >
                 <td>{program.id}</td>
@@ -59,7 +70,8 @@ export class Programs extends Component {
                 <td>{program.owner}</td>
                 <td>
                   <button
-                    onClick={this.props.deleteProgram.bind(this, program.id)}
+                    onClick={e => this.deleteProgram1(e, program.id)}
+                    // onClick={this.props.deleteProgram.bind(this, program.id)}
                     className="btn btn-danger btn-sm"
                   >
                     Delete
